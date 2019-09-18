@@ -37,31 +37,32 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 }
     }
 
-    Files.newBufferedWriter(outputDirectory.resolve("ICPC2.kt")).use { writer ->
-        writer.write("package no.nav.syfo\n\n")
-        writer.write("enum class ICPC2(override val codeValue: String, override val text: String, val icd10: List<ICD10>, override val oid: String = \"2.16.578.1.12.4.1.1.7170\") : Kodeverk {\n")
-        entries
+    Files.newBufferedWriter(outputDirectory.resolve("ICPC2.json")).use { writer ->
+        writer.write("[")
+        writer.write(entries
                 .groupBy { it.icpc2CodeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "    ${firstEntry.icpc2EnumName}(\"${firstEntry.icpc2CodeValue}\", \"${firstEntry.icpc2FullText}\", ${entries.joinToString(", ", "listOf(", ")") { "ICD10.${it.icd10CodeValue}" }}),\n"
+                    "{  \"code\": \"${firstEntry.icpc2CodeValue}\", \"text\":\"${firstEntry.icpc2FullText}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icd10CodeValue}\"" }}}"
                 }
-                .forEach { writer.write(it) }
-        writer.write("}\n")
+                .joinToString(",\n")
+        )
+        writer.write("]\n")
     }
-    Files.newBufferedWriter(outputDirectory.resolve("ICD10.kt")).use { writer ->
-        writer.write("package no.nav.syfo\n\n")
-        writer.write("enum class ICD10(override val codeValue: String, override val text: String, val icpc2: List<ICPC2>, override val oid: String = \"2.16.578.1.12.4.1.1.7110\") : Kodeverk {\n")
 
-        entries.groupBy { it.icd10CodeValue }
-                .map { (_, entries) ->
+    Files.newBufferedWriter(outputDirectory.resolve("ICD10.json")).use { writer ->
+        writer.write("[")
+        writer.write(entries
+                .groupBy { it.icd10CodeValue }
+                .map {
+                    (_, entries) ->
                     val firstEntry = entries.first()
-                    "    ${firstEntry.icd10CodeValue}(\"${firstEntry.icd10CodeValue}\", \"${firstEntry.icd10Text}\", ${entries.joinToString(", ", "listOf(", ")") { "ICPC2.${it.icpc2EnumName}" }}),\n"
+                    "{  \"code\": \"${firstEntry.icd10CodeValue}\", \"text\":\"${firstEntry.icd10Text}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icpc2EnumName}\"" }}}"
                 }
-                .forEach { writer.write(it) }
-        writer.write("}\n")
-        writer.close()
+                .joinToString(",\n")
+        )
+        writer.write("]\n")
     }
     connection.disconnect()
 }
