@@ -1,0 +1,1 @@
+# syfodiagnosecodegeneratorjson.kt
