@@ -26,7 +26,7 @@ data class Entry(
 }
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
-    val connection = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/572e13f2-e404-400b-a87b-c9edf4ad57c1:080afc821ec9cb6a593beac4d5ad079db6f13a1b/Konverteringsfil%20ICPC-2%20til%20ICD-10.txt").openConnection() as HttpURLConnection
+    val connection = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/a952465b-1233-44cf-83db-c4918fbeb962:0c181f545aa52754922fc406663c075574447e28/Konverteringsfil%20ICPC-2%20til%20ICD-10%202019%20-%20oppdatert%2007.10.2019.txt").openConnection() as HttpURLConnection
 
     val entries = BufferedReader(InputStreamReader(connection.inputStream)).use { reader ->
         reader.readLines()
