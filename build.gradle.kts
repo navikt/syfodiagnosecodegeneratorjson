@@ -5,6 +5,7 @@ version = "1.0.0"
 
 val commonsCSVVersion = "1.7"
 val jacksonVersion = "2.9.7"
+val poiVersion = "4.1.1"
 
 plugins {
     kotlin("jvm") version "1.3.61"
@@ -27,6 +28,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("org.apache.commons:commons-csv:$commonsCSVVersion")
+    implementation("org.apache.poi:poi-ooxml:$poiVersion")
 }
 
 tasks {
