@@ -48,24 +48,6 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 icd10Text = row.getCell(2).stringCellValue.toString())
     }
 
-    /*
-    Files.newBufferedWriter(outputDirectory.resolve("ICD10.json")).use { writer ->
-        writer.write("[")
-        writer.write(icd10Entries
-                .groupBy { it.icd10CodeValue }
-                .map {
-                    (_, entries) ->
-                    val firstEntry = entries.first()
-                    "{  \"code\": \"${firstEntry.icd10CodeValue}\", \"text\":\"${firstEntry.icd10Text}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icpc2EnumName}\"" }}}"
-                }
-                .joinToString(",\n")
-        )
-        writer.write("]\n")
-    }
-
-     */
-
-
     val icpc2AOgIcdEntries = BufferedReader(InputStreamReader(icpc2AOgIcd10MappingUrl.inputStream)).use { reader ->
         reader.readLines()
                 .filter { !it.matches(Regex(".?--.+")) }
@@ -90,8 +72,9 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     }
 
     val icd10FilterDuplicatesEntries =
-        icd10Entries.dropWhile { entry ->
-            icpc2AOgIcdEntries.any { entry.icd10CodeValue == it.icd10CodeValue  }
+        icd10Entries.filter { entry ->
+            val listicpc2AOgIcdEntries= icpc2AOgIcdEntries.map { it.icd10CodeValue }
+            !listicpc2AOgIcdEntries.contains(entry.icd10CodeValue)
         }
 
 
