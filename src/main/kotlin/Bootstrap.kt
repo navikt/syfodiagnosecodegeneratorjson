@@ -64,9 +64,9 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{  \"code\": \"${firstEntry.icpc2CodeValue}\", \"text\":\"${firstEntry.icpc2FullText}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icd10CodeValue}\"" }}}"
+                    "{\"code\":\"${firstEntry.icpc2CodeValue}\",\"text\":\"${firstEntry.icpc2FullText}\",\"mapsTo\":${entries.joinToString(",","[","]"){"\"${it.icd10CodeValue}\""}}}"
                 }
-                .joinToString(",\n")
+                .joinToString(",")
         )
         writer.write("]\n")
     }
@@ -85,19 +85,19 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{  \"code\": \"${firstEntry.icd10CodeValue}\", \"text\":\"${firstEntry.icd10Text}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icpc2EnumName}\"" }}}"
+                    "{\"code\":\"${firstEntry.icd10CodeValue}\",\"text\":\"${firstEntry.icd10Text}\",\"mapsTo\":${entries.joinToString(",","[","]"){"\"${it.icpc2EnumName}\""}}}"
                 }
-                .joinToString(",\n")
+                .joinToString(",")
         )
-
+        writer.write(",")
         writer.write(icd10FilterDuplicatesEntries
                 .groupBy { it.icd10CodeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{  \"code\": \"${firstEntry.icd10CodeValue}\", \"text\":\"${firstEntry.icd10Text}\", \"mapsTo:\": ${entries.joinToString(", ", "[", "]") { "\"${it.icpc2EnumName}\"" }}}"
+                    "{\"code\":\"${firstEntry.icd10CodeValue}\",\"text\":\"${firstEntry.icd10Text}\",\"mapsTo\":[]}"
                 }
-                .joinToString(",\n")
+                .joinToString(",")
         )
 
         writer.write("]\n")
