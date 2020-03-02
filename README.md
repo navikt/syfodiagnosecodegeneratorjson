@@ -1,5 +1,5 @@
 # Syfo diagnose code generator json
-Applikasjon får å genere opp json filer, som benyttes i syfosm-commons biblitoeket
+Applikasjon får å genere opp json filer, som benyttes i syfosm-commons(https://github.com/navikt/syfosm-common)  biblitoeket
 
 ### Building the application
 Kjør Bootstrap.kt main metoden, og hent ut json filene med kodeverkene, og legg dei til i syfosm-commons biblitoeket.
