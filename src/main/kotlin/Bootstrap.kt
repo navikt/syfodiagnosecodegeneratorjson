@@ -20,18 +20,14 @@ fun main() {
 }
 
 data class Entry(
-        val icpc2CodeValue: String,
-        val icpc2FullText: String,
-        val icd10CodeValue: String,
-        val icd10Text: String
-) {
-    val icpc2EnumName = icpc2CodeValue.replace("-", "NEGATIVE_")
-}
+        val codeValue: String,
+        val text: String
+)
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
-    val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/b12fb542-c0dc-459d-bba7-0e73d8ba2b97:ef826442450f69949a840df7e3b9de7b0aabda5d/Kodeliste%20ICD-10%202020%20(Excel)%20-%20oppdatert%2001.10.2019.xlsx").openConnection() as HttpURLConnection
-    val icpc2AOgIcd10MappingUrl = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/a952465b-1233-44cf-83db-c4918fbeb962:0c181f545aa52754922fc406663c075574447e28/Konverteringsfil%20ICPC-2%20til%20ICD-10%202019%20-%20oppdatert%2007.10.2019.txt").openConnection() as HttpURLConnection
+    val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/5a7a2b73-f136-4720-8557-f17216a6a8d9:1355ea5594270eb7aef19532d19f21a2a007071d/ICD-10%202020%20-%20oppdatert%2004.02.2020.xlsx").openConnection() as HttpURLConnection
+    val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/84fd2aba-0907-4a63-b792-30a16412f050:9f5cd336597a80bcffb5194d71a18437e7cc47c7/Koderegister%20med%20utvidet%20termsett%20(basert%20p%C3%A5%20icd-10%20mapping)%2006.03.2020.txt").openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
@@ -40,62 +36,44 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     val icd10Entries = icd10KomplettSheet
             .filter { !it.getCell(0).stringCellValue.toString().matches(Regex("Kode"))  }
             .filter { !it.getCell(0).stringCellValue.toString().matches(Regex(""))  }
-            .map {row ->
-        Entry (
-                icpc2CodeValue = "",
-                icpc2FullText = "",
-                icd10CodeValue = row.getCell(0).stringCellValue.toString(),
-                icd10Text = row.getCell(2).stringCellValue.toString())
+            .map {row -> Entry (
+                codeValue = row.getCell(0).stringCellValue.toString(),
+                text = row.getCell(2).stringCellValue.toString())
     }
 
-    val icpc2AOgIcdEntries = BufferedReader(InputStreamReader(icpc2AOgIcd10MappingUrl.inputStream)).use { reader ->
+    val icpc2Entries = BufferedReader(InputStreamReader(icpc2Url.inputStream)).use { reader ->
         reader.readLines()
                 .filter { !it.matches(Regex(".?--.+")) }
-                .map { CSVParser.parse(it, CSVFormat.DEFAULT.withDelimiter(';')) }.flatMap { it.records }
+                .map { CSVParser.parse(it, CSVFormat.DEFAULT.withDelimiter(',')) }.flatMap { it.records }
                 .map {
-                    Entry (icpc2CodeValue = it[0], icpc2FullText = it[1], icd10CodeValue = it[3], icd10Text = it[4])
+                    Entry (codeValue = it[0], text = it[1])
                 }
     }
 
     Files.newBufferedWriter(outputDirectory.resolve("ICPC2.json")).use { writer ->
         writer.write("[")
-        writer.write(icpc2AOgIcdEntries
-                .groupBy { it.icpc2CodeValue }
+        writer.write(icpc2Entries
+                .groupBy { it.codeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.icpc2CodeValue}\",\"text\":\"${firstEntry.icpc2FullText}\",\"mapsTo\":${entries.joinToString(",","[","]"){"\"${it.icd10CodeValue}\""}}}"
+                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text}\"}"
                 }
                 .joinToString(",")
         )
         writer.write("]\n")
     }
 
-    val icd10FilterDuplicatesEntries =
-        icd10Entries.filter { entry ->
-            val listicpc2AOgIcdEntries= icpc2AOgIcdEntries.map { it.icd10CodeValue }
-            !listicpc2AOgIcdEntries.contains(entry.icd10CodeValue)
-        }
 
 
     Files.newBufferedWriter(outputDirectory.resolve("ICD10.json")).use { writer ->
         writer.write("[")
-        writer.write(icpc2AOgIcdEntries
-                .groupBy { it.icd10CodeValue }
+        writer.write(icd10Entries
+                .groupBy { it.codeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.icd10CodeValue}\",\"text\":\"${firstEntry.icd10Text}\",\"mapsTo\":${entries.joinToString(",","[","]"){"\"${it.icpc2EnumName}\""}}}"
-                }
-                .joinToString(",")
-        )
-        writer.write(",")
-        writer.write(icd10FilterDuplicatesEntries
-                .groupBy { it.icd10CodeValue }
-                .map {
-                    (_, entries) ->
-                    val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.icd10CodeValue}\",\"text\":\"${firstEntry.icd10Text}\",\"mapsTo\":[]}"
+                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text.replace("\"", "\\\"")}\"}"
                 }
                 .joinToString(",")
         )
@@ -103,6 +81,6 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
         writer.write("]\n")
     }
 
-    icpc2AOgIcd10MappingUrl.disconnect()
     icd10Url.disconnect()
+    icpc2Url.disconnect()
 }
