@@ -19,17 +19,10 @@ fun main() {
     generateDiagnoseCodes(sourcePackage)
 }
 
-data class Icd10Entry(
-        val icd10CodeValue: String,
-        val icd10Text: String
+data class Entry(
+        val codeValue: String,
+        val text: String
 )
-
-data class Icpc2Entry(
-        val icpc2CodeValue: String,
-        val icpc2FullText: String
-) {
-    val icpc2EnumName = icpc2CodeValue.replace("-", "NEGATIVE_")
-}
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
@@ -43,9 +36,9 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     val icd10Entries = icd10KomplettSheet
             .filter { !it.getCell(0).stringCellValue.toString().matches(Regex("Kode"))  }
             .filter { !it.getCell(0).stringCellValue.toString().matches(Regex(""))  }
-            .map {row -> Icd10Entry (
-                icd10CodeValue = row.getCell(0).stringCellValue.toString(),
-                icd10Text = row.getCell(2).stringCellValue.toString())
+            .map {row -> Entry (
+                codeValue = row.getCell(0).stringCellValue.toString(),
+                text = row.getCell(2).stringCellValue.toString())
     }
 
     val icpc2Entries = BufferedReader(InputStreamReader(icpc2Url.inputStream)).use { reader ->
@@ -53,18 +46,18 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 .filter { !it.matches(Regex(".?--.+")) }
                 .map { CSVParser.parse(it, CSVFormat.DEFAULT.withDelimiter(',')) }.flatMap { it.records }
                 .map {
-                    Icpc2Entry (icpc2CodeValue = it[0], icpc2FullText = it[1])
+                    Entry (codeValue = it[0], text = it[1])
                 }
     }
 
     Files.newBufferedWriter(outputDirectory.resolve("ICPC2.json")).use { writer ->
         writer.write("[")
         writer.write(icpc2Entries
-                .groupBy { it.icpc2CodeValue }
+                .groupBy { it.codeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.icpc2CodeValue}\",\"text\":\"${firstEntry.icpc2FullText}\"}"
+                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text}\"}"
                 }
                 .joinToString(",")
         )
@@ -76,11 +69,11 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     Files.newBufferedWriter(outputDirectory.resolve("ICD10.json")).use { writer ->
         writer.write("[")
         writer.write(icd10Entries
-                .groupBy { it.icd10CodeValue }
+                .groupBy { it.codeValue }
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.icd10CodeValue}\",\"text\":\"${firstEntry.icd10Text.replace(Regex("[^a-zA-Z0-9 ]"), "'")}\"}"
+                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text.replace(Regex("[^a-zA-Z0-9 ]"), "'")}\"}"
                 }
                 .joinToString(",")
         )
