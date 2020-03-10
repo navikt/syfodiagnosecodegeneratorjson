@@ -73,7 +73,7 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
                 .map {
                     (_, entries) ->
                     val firstEntry = entries.first()
-                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text.replace(Regex("[^a-zA-Z0-9 ]"), "'")}\"}"
+                    "{\"code\":\"${firstEntry.codeValue}\",\"text\":\"${firstEntry.text.replace("\"", "\\\"")}\"}"
                 }
                 .joinToString(",")
         )
