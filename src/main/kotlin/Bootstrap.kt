@@ -26,8 +26,8 @@ data class Entry(
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
-    val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/5a7a2b73-f136-4720-8557-f17216a6a8d9:1355ea5594270eb7aef19532d19f21a2a007071d/ICD-10%202020%20-%20oppdatert%2004.02.2020.xlsx").openConnection() as HttpURLConnection
-    val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/84fd2aba-0907-4a63-b792-30a16412f050:9f5cd336597a80bcffb5194d71a18437e7cc47c7/Koderegister%20med%20utvidet%20termsett%20(basert%20p%C3%A5%20icd-10%20mapping)%2006.03.2020.txt").openConnection() as HttpURLConnection
+    val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/695fc467-d25d-4429-b065-c4e40c9cc067:8dcf17eae799876cf9f2a4b5b16fe339051540be/Kodeliste%20ICD-10%202020%20(Excel)%20-%20oppdatert%2026.03.2020.xlsx").openConnection() as HttpURLConnection
+    val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/cdf1ea88-2467-4a64-9ecf-094b3f2461eb:8ec26072bdaf560adb134ffc4050f070e9925bc9/Koderegister%20med%20utvidet%20termsett%20(basert%20p%C3%A5%20icd-10%20mapping).txt%20-%2004.05.2020.txt").openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
