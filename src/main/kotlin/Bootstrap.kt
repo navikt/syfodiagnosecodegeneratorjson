@@ -27,7 +27,7 @@ data class Entry(
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
     val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/695fc467-d25d-4429-b065-c4e40c9cc067:8dcf17eae799876cf9f2a4b5b16fe339051540be/Kodeliste%20ICD-10%202020%20(Excel)%20-%20oppdatert%2026.03.2020.xlsx").openConnection() as HttpURLConnection
-    val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/cdf1ea88-2467-4a64-9ecf-094b3f2461eb:8ec26072bdaf560adb134ffc4050f070e9925bc9/Koderegister%20med%20utvidet%20termsett%20(basert%20p%C3%A5%20icd-10%20mapping).txt%20-%2004.05.2020.txt").openConnection() as HttpURLConnection
+    val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/2dc257eb-d789-41fd-a006-58dbdf4e5bb5:03426b33938428ee6ed622c9df6db8992146fc62/Koderegister%2060%20tegn%20med%20fullstendig%20sett%20prosesskoder%20(til%20NAV).txt%20-%2004.05.2020.txt").openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
