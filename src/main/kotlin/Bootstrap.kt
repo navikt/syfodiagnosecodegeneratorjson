@@ -44,7 +44,7 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     val icpc2Entries = BufferedReader(InputStreamReader(icpc2Url.inputStream)).use { reader ->
         reader.readLines()
                 .filter { !it.matches(Regex(".?--.+")) }
-                .map { CSVParser.parse(it, CSVFormat.DEFAULT.withDelimiter(',')) }.flatMap { it.records }
+                .map { CSVParser.parse(it, CSVFormat.Builder.create().setDelimiter(',').build()) }.flatMap { it.records }
                 .map {
                     Entry (codeValue = it[0], text = it[1])
                 }
