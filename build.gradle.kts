@@ -3,26 +3,23 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val commonsCSVVersion = "1.7"
-val jacksonVersion = "2.9.7"
-val poiVersion = "4.1.1"
+val commonsCSVVersion = "1.9.0"
+val jacksonVersion = "2.13.1"
+val poiVersion = "5.2.0"
 
 plugins {
-    kotlin("jvm") version "1.3.61"
+    kotlin("jvm") version "1.6.0"
 }
 
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven (url= "https://kotlin.bintray.com/kotlinx")
-    maven (url= "http://packages.confluent.io/maven/")
 }
 
 
 
 dependencies {
-    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
@@ -39,6 +36,6 @@ tasks {
         }
     }
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "17"
     }
 }

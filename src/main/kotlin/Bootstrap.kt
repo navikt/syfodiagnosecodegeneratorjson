@@ -26,12 +26,12 @@ data class Entry(
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
-    val icd10Url = URL("https://ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/bb739b6c-6804-41af-bbed-f6bec4fd3da6:35aa8012438993b531ef5758876200903b7919a2/Kodeliste%20ICD-10%202021%202020-10-12.xlsx").openConnection() as HttpURLConnection
+    val icd10Url = URL("https://www.ehelse.no/kodeverk/kodeverket-icd-10-og-icd-11/_/attachment/download/213ee9ea-7966-48f7-9130-fe1e603872bf:164e4276b153b878738c7ae35ec29dbcc2edf821/Kodeliste%20ICD-10%202022%20korrigert%20(excel)%20.xlsx").openConnection() as HttpURLConnection
     val icpc2Url = URL("https://ehelse.no/kodeverk/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/2dc257eb-d789-41fd-a006-58dbdf4e5bb5:03426b33938428ee6ed622c9df6db8992146fc62/Koderegister%2060%20tegn%20med%20fullstendig%20sett%20prosesskoder%20(til%20NAV).txt%20-%2004.05.2020.txt").openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
-    val icd10KomplettSheet: Sheet = icd10KomplettWorkbook.getSheetAt(1)
+    val icd10KomplettSheet: Sheet = icd10KomplettWorkbook.getSheetAt(0)
 
     val icd10Entries = icd10KomplettSheet
             .filter { !it.getCell(0).stringCellValue.toString().matches(Regex("Kode"))  }
@@ -44,7 +44,7 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
     val icpc2Entries = BufferedReader(InputStreamReader(icpc2Url.inputStream)).use { reader ->
         reader.readLines()
                 .filter { !it.matches(Regex(".?--.+")) }
-                .map { CSVParser.parse(it, CSVFormat.DEFAULT.withDelimiter(',')) }.flatMap { it.records }
+                .map { CSVParser.parse(it, CSVFormat.Builder.create().setDelimiter(',').build()) }.flatMap { it.records }
                 .map {
                     Entry (codeValue = it[0], text = it[1])
                 }
