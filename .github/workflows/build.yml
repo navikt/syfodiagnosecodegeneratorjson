@@ -1,0 +1,44 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    name: Checkout code and create docker tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Gradle wrapper validation
+        uses: gradle/wrapper-validation-action@v1.1.0
+      - name: Setup gradle dependency cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/.*gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run tests
+        env:
+          ORG_GRADLE_PROJECT_githubUser: x-access-token
+          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew test
+      - name: Build jar
+        env:
+          ORG_GRADLE_PROJECT_githubUser: x-access-token
+          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew shadowJar -x test
