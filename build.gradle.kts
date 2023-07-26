@@ -5,11 +5,11 @@ version = "1.0.0"
 
 val jacksonVersion = "2.14.2"
 val poiVersion = "5.2.3"
-val kotlinVersion = "1.8.10"
+val kotlinVersion = "1.9.0"
 val jdkVersion = "17"
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.9.0"
 }
 
 repositories {
