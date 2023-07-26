@@ -9,7 +9,7 @@ val kotlinVersion = "1.8.10"
 val jdkVersion = "17"
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.9.0"
 }
 
 repositories {
