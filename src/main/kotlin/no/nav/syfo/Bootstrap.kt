@@ -1,3 +1,5 @@
+package no.nav.syfo
+
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
@@ -22,8 +24,8 @@ data class Entry(
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
-    val icd10Url = URL("https://www.ehelse.no/kodeverk-terminologi/kodeverket-icd-10-og-icd-11/_/attachment/download/5f1c5c15-edd5-4d87-b931-27233798ac18:a97a17a0b0ad92afec7a4d4fcb61dc637f35bd70/ICD-10%202023%20oppdatert%2013.12.22.xlsx").openConnection() as HttpURLConnection
-    val icpc2Url = URL("https://www.ehelse.no/kodeverk-terminologi/icpc-2.den-internasjonale-klassifikasjonen-for-primaerhelsetjenesten/_/attachment/download/6e2fb095-fd05-4ee5-857f-bd608f11ee45:1715ee3351db84772fd3ed1a23aebbad33746210/Fil%202%202023%20-%20ICPC-2%20teknisk%20koderegister%20med%20prosesskoder,%20fulltekst%20og%2060%20tegn%20tekst%20(kun%20en%20linje%20per%20kode)%20(Excel).xlsx").openConnection() as HttpURLConnection
+    val icd10Url = URL("https://www.ehelse.no/kodeverk-og-terminologi/ICD-10-og-ICD-11/_/attachment/inline/4d2b7160-407d-417a-b848-112002cc025c:4246e4ef5745de04307a4d5ae3a2a23dd23dc47f/Kodeliste%20ICD-10%202023%20oppdatert%2013.12.22.xlsx").openConnection() as HttpURLConnection
+    val icpc2Url = URL("https://www.ehelse.no/kodeverk-og-terminologi/ICPC-2/_/attachment/inline/bfa952b9-fbb5-49fe-963b-27024d573e71:3cdfa328cb7f9333a6707bb3bc079ce9d423174f/Fil%202%202023%20-%20ICPC-2%20teknisk%20koderegister%20med%20prosesskoder,%20fulltekst%20og%2060%20tegn%20tekst%20(kun%20en%20linje%20per%20kode)%20(Excel).xlsx").openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
