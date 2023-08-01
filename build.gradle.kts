@@ -7,7 +7,7 @@ val jacksonVersion = "2.14.2"
 val poiVersion = "5.2.3"
 val kotlinVersion = "1.9.0"
 val logbackVersion= "1.4.8"
-val logstashEncoderVersion = "7.3"
+val logstashEncoderVersion = "7.4"
 val log4jCoreVersion = "2.20.0"
 val jdkVersion = "17"
 
