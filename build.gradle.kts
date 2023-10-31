@@ -12,7 +12,7 @@ val log4jCoreVersion = "2.21.1"
 val jdkVersion = "17"
 
 plugins {
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
 }
 
 repositories {
