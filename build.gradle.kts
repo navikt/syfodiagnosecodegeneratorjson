@@ -4,7 +4,7 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val jacksonVersion = "2.14.2"
-val poiVersion = "5.2.4"
+val poiVersion = "5.2.5"
 val kotlinVersion = "1.9.21"
 val logbackVersion= "1.4.11"
 val logstashEncoderVersion = "7.4"
