@@ -3,12 +3,16 @@ package no.nav.syfo
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Path
 
+
+val log: Logger = LoggerFactory.getLogger("no.nav.syfo")
 
 fun main() {
     val outputDirectory = File("src/main/resources")
@@ -24,8 +28,8 @@ data class Entry(
 
 fun generateDiagnoseCodes(outputDirectory: Path) {
 
-    val icd10Url = URL("https://www.ehelse.no/kodeverk-og-terminologi/ICD-10-og-ICD-11/_/attachment/inline/4d2b7160-407d-417a-b848-112002cc025c:4246e4ef5745de04307a4d5ae3a2a23dd23dc47f/Kodeliste%20ICD-10%202023%20oppdatert%2013.12.22.xlsx").openConnection() as HttpURLConnection
-    val icpc2Url = URL("https://www.ehelse.no/kodeverk-og-terminologi/ICPC-2/_/attachment/inline/bfa952b9-fbb5-49fe-963b-27024d573e71:3cdfa328cb7f9333a6707bb3bc079ce9d423174f/Fil%202%202023%20-%20ICPC-2%20teknisk%20koderegister%20med%20prosesskoder,%20fulltekst%20og%2060%20tegn%20tekst%20(kun%20en%20linje%20per%20kode)%20(Excel).xlsx").openConnection() as HttpURLConnection
+    val icd10Url = URI.create("https://www.ehelse.no/kodeverk-og-terminologi/ICD-10-og-ICD-11/_/attachment/inline/4d2b7160-407d-417a-b848-112002cc025c:4246e4ef5745de04307a4d5ae3a2a23dd23dc47f/Kodeliste%20ICD-10%202023%20oppdatert%2013.12.22.xlsx").toURL().openConnection() as HttpURLConnection
+    val icpc2Url = URI.create("https://www.ehelse.no/kodeverk-og-terminologi/ICPC-2/_/attachment/inline/bfa952b9-fbb5-49fe-963b-27024d573e71:3cdfa328cb7f9333a6707bb3bc079ce9d423174f/Fil%202%202023%20-%20ICPC-2%20teknisk%20koderegister%20med%20prosesskoder,%20fulltekst%20og%2060%20tegn%20tekst%20(kun%20en%20linje%20per%20kode)%20(Excel).xlsx").toURL().openConnection() as HttpURLConnection
 
 
     val icd10KomplettWorkbook: Workbook = XSSFWorkbook(icd10Url.inputStream)
@@ -122,6 +126,8 @@ fun generateDiagnoseCodes(outputDirectory: Path) {
 
         writer.write("]\n")
     }
+
+    log.info("Finish writing to json")
 
     icd10Url.disconnect()
     icpc2Url.disconnect()

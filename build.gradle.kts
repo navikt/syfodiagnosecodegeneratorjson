@@ -1,15 +1,13 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val jacksonVersion = "2.14.2"
+val jacksonVersion = "2.16.0"
 val poiVersion = "5.2.5"
 val kotlinVersion = "1.9.21"
 val logbackVersion= "1.4.12"
 val logstashEncoderVersion = "7.4"
 val log4jCoreVersion = "2.22.0"
-val jdkVersion = "17"
+val javaVersion = JavaVersion.VERSION_21
 
 plugins {
     kotlin("jvm") version "1.9.21"
@@ -22,19 +20,14 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("org.apache.poi:poi-ooxml:$poiVersion")
+
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashEncoderVersion")
     runtimeOnly("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
 }
 
 tasks {
-
-    create("printVersion") {
-        doLast {
-            println(project.version)
-        }
-    }
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = jdkVersion
+    compileKotlin {
+        kotlinOptions.jvmTarget = javaVersion.toString()
     }
 }
