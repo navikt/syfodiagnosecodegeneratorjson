@@ -17,6 +17,12 @@ og legg dei til manuelt i syfosm-commons-biblioteket(https://github.com/navikt/s
 
 Verifiser at filene er gyldig json og rett eventuelle feil. 
 
+for å kjøre main metoden fra terminal kjør følgende kommando:
+``` bash
+./gradlew run
+```
+
+
 
 ## Oppgradering av gradle wrapper
 Finn nyeste versjon av gradle her: https://gradle.org/releases/

@@ -11,6 +11,11 @@ val javaVersion = JavaVersion.VERSION_21
 
 plugins {
     kotlin("jvm") version "1.9.21"
+    id("application")
+}
+
+application {
+    mainClass.set("no.nav.syfo.BootstrapKt")
 }
 
 repositories {
