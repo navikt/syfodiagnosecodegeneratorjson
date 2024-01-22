@@ -6,7 +6,7 @@ val poiVersion = "5.2.5"
 val kotlinVersion = "1.9.22"
 val logbackVersion= "1.4.14"
 val logstashEncoderVersion = "7.4"
-val log4jCoreVersion = "2.22.0"
+val log4jCoreVersion = "2.22.1"
 val javaVersion = JavaVersion.VERSION_21
 
 plugins {
