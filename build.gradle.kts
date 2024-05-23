@@ -3,14 +3,14 @@ version = "1.0.0"
 
 val jacksonVersion = "2.16.0"
 val poiVersion = "5.2.5"
-val kotlinVersion = "1.9.24"
+val kotlinVersion = "2.0.0"
 val logbackVersion= "1.5.6"
 val logstashEncoderVersion = "7.4"
 val log4jCoreVersion = "2.23.1"
 val javaVersion = JavaVersion.VERSION_21
 
 plugins {
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm") version "2.0.0"
     id("application")
 }
 
