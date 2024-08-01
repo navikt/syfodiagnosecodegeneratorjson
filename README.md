@@ -2,6 +2,9 @@
 Applikasjon for å generere opp json-filer som benyttes i 
 syfosm-common-biblioteket (https://github.com/navikt/syfosm-common)
 
+> [!WARNING]
+> Dette repoet er deprekert og arkivert. Bruk [navikt/diagnosekoder](https://github.com/navikt/diagnosekoder)
+
 
 ### Oppdatering av diagnosekoder
 Diagnosekoder, både ICD10 og ICPC2, får vi fra ehelse. Det kommer normalt ny versjon av diagnosekodene hvert år.
